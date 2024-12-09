@@ -129,7 +129,7 @@ class ConiqAccountService {
       var request = http.Request(
           'GET',
           Uri.parse(
-              'https://portal.villagecirclerewards.com/crapis/customer/entry/level/samirorket@gmail.com'));
+              'https://portal.villagecirclerewards.com/crapis/customer/entry/level/$email'));
 
       http.StreamedResponse response = await request.send();
 

@@ -41,10 +41,10 @@ class TermsScreen extends StatelessWidget {
                     '''
 • All participants must be of minimum age of 18 years to take part unless stated otherwise by the Management.
 • Participants must be members of Village Market’s Circle Rewards programme.
-• Participants must spend a minimum of KES 5,000 and above in a single transaction (not accumulated) during the promotion period in participating outlets and remember to collect their points upon checkout. Eligibility for rewards is determined by total spend:
+• Participants must spend a minimum of KES 1,000 and above in a single transaction (not accumulated) during the promotion period in participating outlets and remember to collect their points upon checkout. Eligibility for rewards is determined by total spend:
    - Tier 3 Prizes: Total spend of KES 750,001 and above.
    - Tier 2 Prizes: Total spend of KES 350,001 to KES 750,000.
-   - Tier 1 Prizes: Total spend of KES 5,000 to KES 350,000.
+   - Tier 1 Prizes: Total spend of KES 1,000 to KES 350,000.
 • By submitting participation details, entrants confirm their information is true, current, and complete. Village Market reserves the right to verify and/or disqualify entries in violation of the rules.
 • Village Market reserves the right to monitor, edit, refuse, or remove information provided by participants.
 • Participants must ensure their entries do not infringe on third-party rights, including intellectual property or privacy rights, and must not contain libelous, defamatory, obscene, or threatening material.

@@ -150,19 +150,19 @@ class _RaffleInfoWidgetState extends State<RaffleInfoWidget> {
                                   LevelIndicatorWidget(
                                     label: 'Tier 1',
                                     message:
-                                        'Earn 1 entry for every KES 5,000 spent! Collect 1–70 entries to reach Tier 1. Higher tiers boost your chances to win exciting rewards, including a grand prize: a trip for two to Santorini!',
+                                        'Earn 1 entry for every KES 1,000 spent! Collect 1–70 entries to reach Tier 1. Higher tiers boost your chances to win exciting rewards, including a grand prize: a trip for two to Santorini!',
                                     toolTipKey: toolTipKey1,
                                   ),
                                   LevelIndicatorWidget(
                                     label: 'Tier 2',
                                     message:
-                                        'Earn 1 entry for every KES 5,000 spent! Collect 71–150 entries to reach Tier 2. Higher tiers boost your chances to win exciting rewards, including a grand prize: a trip for two to Santorini!',
+                                        'Earn 1 entry for every KES 1,000 spent! Collect 71–150 entries to reach Tier 2. Higher tiers boost your chances to win exciting rewards, including a grand prize: a trip for two to Santorini!',
                                     toolTipKey: toolTipKey2,
                                   ),
                                   LevelIndicatorWidget(
                                     label: 'Tier 3',
                                     message:
-                                        'Earn 1 entry for every KES 5,000 spent! Collect atleast 150 entries to reach Tier 3. Higher tiers boost your chances to win exciting rewards, including a grand prize: a trip for two to Santorini!',
+                                        'Earn 1 entry for every KES 1,000 spent! Collect atleast 150 entries to reach Tier 3. Higher tiers boost your chances to win exciting rewards, including a grand prize: a trip for two to Santorini!',
                                     toolTipKey: toolTipKey3,
                                   ),
                                 ],
@@ -201,7 +201,7 @@ class _RaffleInfoWidgetState extends State<RaffleInfoWidget> {
                                 ),
                                 TextSpan(
                                   text:
-                                      " Every KES 5,000 spent earns you an entry into the grand draw for incredible prizes, including the grand prize: a trip for two to Santorini. Keep shopping to boost your entries and increase your chances of winning exciting prizes! ",
+                                      " Every KES 1,000 spent earns you an entry into the grand draw for incredible prizes, including the grand prize: a trip for two to Santorini. Keep shopping to boost your entries and increase your chances of winning exciting prizes! ",
                                   style: Theme.of(context)
                                       .textTheme
                                       .labelMedium
