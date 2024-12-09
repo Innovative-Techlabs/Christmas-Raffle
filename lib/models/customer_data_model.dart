@@ -1,7 +1,13 @@
 import 'dart:convert';
 
-CustomerData? customerDataFromJson(String str) =>
-    CustomerData.fromJson(json.decode(str));
+CustomerData? customerDataFromJson(String str) {
+  final jsonData = json.decode(str);
+  if (jsonData['status'] == 'success') {
+    return CustomerData.fromJson(jsonData);
+  } else {
+    return null; // If status is not 'success', return null or handle the error
+  }
+}
 
 String customerDataToJson(CustomerData data) => json.encode(data.toJson());
 

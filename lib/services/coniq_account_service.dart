@@ -132,14 +132,16 @@ class ConiqAccountService {
               'https://portal.villagecirclerewards.com/crapis/customer/entry/level/$email'));
 
       http.StreamedResponse response = await request.send();
+      var body = jsonDecode(await response.stream.bytesToString());
 
       if (response.statusCode == 200) {
-        return customerDataFromJson(await response.stream.bytesToString());
+        return customerDataFromJson(jsonEncode(body));
+      } else {
+        return null;
       }
     } catch (e) {
       throw e.toString();
     }
-    return null;
   }
 
   Future<int> reedemPoints(

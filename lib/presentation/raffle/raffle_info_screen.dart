@@ -52,7 +52,7 @@ class _RaffleInfoScreenState extends State<RaffleInfoScreen> {
               );
             } else if (snapshot.data == null) {
               child = const RaffleInfoWidget(
-                entries: 11,
+                entries: 0,
                 validEntries: [],
               );
             } else if (snapshot.hasData && snapshot.data != null) {
