@@ -9,16 +9,16 @@ User userDetailsFromJson(String str) => User.fromJson(json.decode(str));
 String userDetailsToJson(User data) => json.encode(data.toJson());
 
 class User {
-  static String getTierText(int spending) {
-    int entries =
-        spending ~/ 1000; // Calculate the number of entries by dividing by 1000
-
+  static getTierText(int entries) {
     if (entries >= 1 && entries <= 350) {
-      return 'You are in Tier 1! Spend between KES 1,000 and KES 350,000 to stay here.';
+      return 'You are in Tier 1! Spend between KES 1,000 and KES 350,000 to stay here. '
+          'You need ${350 - entries} more entries to reach Tier 2.';
     } else if (entries >= 351 && entries <= 750) {
-      return 'You are in Tier 2! Spend between KES 351,000 and KES 750,000 to stay here.';
+      return 'You are in Tier 2! Spend between KES 351,000 and KES 750,000 to stay here. '
+          'You need ${750 - entries} more entries to reach Tier 3.';
     } else if (entries >= 751) {
-      return 'You are in Tier 3! Spend over KES 750,000 to stay here.';
+      return 'You are in Tier 3! Spend over KES 750,000 to stay here. '
+          'You are already at the highest tier!';
     } else {
       return 'To unlock Tier 1, spend KES 1,000 and above in a single transaction across the mall.';
     }
