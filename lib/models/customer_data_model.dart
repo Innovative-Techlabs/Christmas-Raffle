@@ -20,7 +20,7 @@ class CustomerData {
 
   factory CustomerData.fromJson(Map<String, dynamic> json) => CustomerData(
         status: json["status"],
-        emailAddress: json["email_address"],
+        emailAddress: json["email_addresss"],
         entryData: json['entry_data'] != null
             ? EntryData.fromJson(json["entry_data"])
             : null,

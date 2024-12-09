@@ -134,12 +134,7 @@ class ConiqAccountService {
       http.StreamedResponse response = await request.send();
 
       if (response.statusCode == 200) {
-        var data = (await response.stream.bytesToString());
-
-        String? email = jsonDecode(data)['email_address'];
-        if (email != null) {
-          return customerDataFromJson(jsonEncode(data));
-        }
+        return customerDataFromJson(await response.stream.bytesToString());
       }
     } catch (e) {
       throw e.toString();

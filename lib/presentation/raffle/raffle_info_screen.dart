@@ -17,10 +17,15 @@ import 'package:skidata/utils/constants.dart';
 import 'package:skidata/utils/responsive.dart';
 import 'package:skidata/utils/string_ext.dart';
 
-class RaffleInfoScreen extends StatelessWidget {
+class RaffleInfoScreen extends StatefulWidget {
   static const routeName = '/raffle';
   const RaffleInfoScreen({super.key});
 
+  @override
+  State<RaffleInfoScreen> createState() => _RaffleInfoScreenState();
+}
+
+class _RaffleInfoScreenState extends State<RaffleInfoScreen> {
   Future<CustomerData?> getUserData() async {
     return ConiqAccountService()
         .getCustomerInformation(AppPreferences.getEmailString()!);
@@ -47,7 +52,7 @@ class RaffleInfoScreen extends StatelessWidget {
               );
             } else if (snapshot.data == null) {
               child = const RaffleInfoWidget(
-                entries: 0,
+                entries: 11,
                 validEntries: [],
               );
             } else if (snapshot.hasData && snapshot.data != null) {
@@ -134,9 +139,11 @@ class _RaffleInfoWidgetState extends State<RaffleInfoWidget> {
                                   elevation: 0,
                                   type: StepperType.horizontal,
                                   steps: <Step>[
-                                    stepperbuilder(widget.entries > 1),
-                                    stepperbuilder(widget.entries > 70),
-                                    stepperbuilder(widget.entries > 150),
+                                    stepperbuilder(widget.entries >= 1 &&
+                                        widget.entries <= 350),
+                                    stepperbuilder(widget.entries >= 351 &&
+                                        widget.entries <= 750),
+                                    stepperbuilder(widget.entries >= 751),
                                   ]),
                             ),
                             Positioned(
