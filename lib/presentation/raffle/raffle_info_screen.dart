@@ -36,7 +36,7 @@ class _RaffleInfoScreenState extends State<RaffleInfoScreen> {
     return Scaffold(
       drawer: const AppDrawer(),
       backgroundColor: kBackgroundGrey,
-      body: FutureBuilder(
+      body: FutureBuilder<CustomerData?>(
           future: getUserData(),
           builder: (
             context,
@@ -52,11 +52,13 @@ class _RaffleInfoScreenState extends State<RaffleInfoScreen> {
               );
             } else if (snapshot.data == null) {
               child = const RaffleInfoWidget(
+                name: '',
                 entries: 0,
                 validEntries: [],
               );
             } else if (snapshot.hasData && snapshot.data != null) {
               child = RaffleInfoWidget(
+                name: snapshot.data!.entryData!.customerName!,
                 entries: snapshot.data?.entryData?.entries ?? 0,
                 validEntries: snapshot.data?.transactionData! ?? [],
               );
@@ -73,11 +75,13 @@ class _RaffleInfoScreenState extends State<RaffleInfoScreen> {
 
 class RaffleInfoWidget extends StatefulWidget {
   final List<Entry> validEntries;
+  final String name;
   final int entries;
   const RaffleInfoWidget({
     super.key,
     required this.validEntries,
     required this.entries,
+    required this.name,
   });
 
   @override
@@ -109,6 +113,13 @@ class _RaffleInfoWidgetState extends State<RaffleInfoWidget> {
             child: Column(
               children: [
                 Text(
+                  ' Welcome  ${widget.name}',
+                  style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      color: kDarkBlueTxtColor),
+                ),
+                Text(
                   '${widget.entries}',
                   style: const TextStyle(
                       fontSize: 32,
@@ -118,7 +129,7 @@ class _RaffleInfoWidgetState extends State<RaffleInfoWidget> {
                 const Text(
                   'Christmas Raffle Entries',
                   style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 14,
                       fontWeight: FontWeight.w700,
                       color: kDarkBlueTxtColor),
                 ),
@@ -139,10 +150,8 @@ class _RaffleInfoWidgetState extends State<RaffleInfoWidget> {
                                   elevation: 0,
                                   type: StepperType.horizontal,
                                   steps: <Step>[
-                                    stepperbuilder(widget.entries >= 1 &&
-                                        widget.entries <= 350),
-                                    stepperbuilder(widget.entries >= 351 &&
-                                        widget.entries <= 750),
+                                    stepperbuilder(widget.entries >= 1),
+                                    stepperbuilder(widget.entries >= 351),
                                     stepperbuilder(widget.entries >= 751),
                                   ]),
                             ),
