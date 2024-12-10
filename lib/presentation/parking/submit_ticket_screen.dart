@@ -30,7 +30,7 @@ class _SubmitTicketState extends State<SubmitTicket> {
   }
 
   Future<void> _loadUserDetails() async {
-    var token = AppPreferences.getStoredToken()!;
+    var token = AppPreferences.getStoredToken();
 
     getUsers = ConiqAccountService().getUser(token);
   }

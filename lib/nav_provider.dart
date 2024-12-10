@@ -97,7 +97,7 @@ class NavProvider with ChangeNotifier {
     try {
       int amount = AppPreferences.getStoredTicketAmount()!;
       int statusCode = await ConiqAccountService().reedemPoints(amount,
-          pointsToRuleMap[amount].toString(), AppPreferences.getStoredToken()!);
+          pointsToRuleMap[amount].toString(), AppPreferences.getStoredToken());
 
       if (statusCode == 201 && ctx.mounted) {
         Navigator.of(ctx).pushNamed(PaymentConfirmationScreen.routeName);

@@ -21,7 +21,7 @@ class PaymentConfirmationScreen extends StatelessWidget {
       body: Center(
         child: FutureBuilder<User?>(
             future:
-                ConiqAccountService().getUser(AppPreferences.getStoredToken()!),
+                ConiqAccountService().getUser(AppPreferences.getStoredToken()),
             builder: (context, snapshot) {
               Widget? child;
               if (snapshot.connectionState == ConnectionState.waiting) {

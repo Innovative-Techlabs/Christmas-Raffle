@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:skidata/models/customer_data_model.dart';
 import 'package:skidata/models/tx.dart';
 import 'package:skidata/models/user.dart';
-import 'package:skidata/presentation/login.dart';
 import 'package:skidata/services/prefs.dart';
 
 Future<bool> isTokenExpiredFunction(String token) async {
@@ -158,12 +157,6 @@ class ConiqAccountService {
 
       if (response.statusCode == 200) {
         return customerDataFromJson(jsonEncode(body));
-      } else if (response.statusCode == 401) {
-        if (context.mounted) {
-          print('*' * 89);
-          Navigator.pushReplacementNamed(context, LoginScreen.routeName);
-        }
-        return null;
       }
     } catch (e) {
       throw e.toString();

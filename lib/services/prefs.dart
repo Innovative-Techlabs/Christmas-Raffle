@@ -26,7 +26,7 @@ class AppPreferences {
     _preferences!.setInt(ticketKey, amount);
   }
 
-  static String? getStoredToken() => _preferences?.getString(tokenKey);
+  static String getStoredToken() => _preferences?.getString(tokenKey) ?? '';
   static String? getEmailString() => _preferences?.getString(emailKey);
 
   static int? getStoredTicketAmount() => _preferences?.getInt(ticketKey);

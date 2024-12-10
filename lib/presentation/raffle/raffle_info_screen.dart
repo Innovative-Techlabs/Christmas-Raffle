@@ -29,7 +29,7 @@ class RaffleInfoScreen extends StatefulWidget {
 class _RaffleInfoScreenState extends State<RaffleInfoScreen> {
   Future<List<ActivityFeed>> getUserData() async {
     return ConiqAccountService()
-        .getUserTransactions(AppPreferences.getStoredToken()!, context);
+        .getUserTransactions(AppPreferences.getStoredToken(), context);
   }
 
   @override
