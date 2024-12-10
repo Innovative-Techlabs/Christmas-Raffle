@@ -78772,7 +78772,7 @@ this.d=A.zf()},
 K(a){var s,r,q,p,o,n,m,l,k=this,j=null,i=k.a,h=A.bQ(" Welcome  "+i.d,j,j,j,B.RL,j,j)
 i=A.bQ(""+i.e,j,j,j,B.RM,j,j)
 s=A.W(a).p2.ax
-s=A.bQ("*Entries are calculated hourly and may take time to update",j,j,j,s==null?j:s.bB(B.cw),j,j)
+s=A.bQ("*Raffles are calculated hourly and may take upto an hour",j,j,j,s==null?j:s.bB(B.cw),j,j)
 r=A.mh(j,B.j,j,j,j)
 q=k.a.e
 p=t.p

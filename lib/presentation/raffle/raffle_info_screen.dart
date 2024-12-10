@@ -134,7 +134,7 @@ class _RaffleInfoWidgetState extends State<RaffleInfoWidget> {
                       color: kDarkBlueTxtColor),
                 ),
                 Text(
-                  '*Entries are calculated hourly and may take time to update',
+                  '*Raffles are calculated hourly and may take upto an hour',
                   style: Theme.of(context).textTheme.labelSmall?.copyWith(
                         color: Colors.red,
                       ),
