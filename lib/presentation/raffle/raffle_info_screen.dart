@@ -133,6 +133,12 @@ class _RaffleInfoWidgetState extends State<RaffleInfoWidget> {
                       fontWeight: FontWeight.w700,
                       color: kDarkBlueTxtColor),
                 ),
+                Text(
+                  '*Entries are calculated hourly and may take time to update',
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: Colors.red,
+                      ),
+                ),
                 kSBox10V,
                 CustomCard(
                     padding:
