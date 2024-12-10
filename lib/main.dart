@@ -44,6 +44,7 @@ class MyApp extends StatelessWidget {
       // home: const RaffleInfoScreen(),
       // home: const SpinWheelScreen(),
       routes: {
+        LoginScreen.routeName: (ctx) => const LoginScreen(),
         SubmitTicket.routeName: (ctx) => const SubmitTicket(),
         PaymentScreen.routeName: (ctx) => const PaymentScreen(),
         PaymentConfirmationScreen.routeName: (ctx) =>

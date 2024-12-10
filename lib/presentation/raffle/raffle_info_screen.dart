@@ -3,11 +3,12 @@ import 'dart:convert';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:skidata/models/customer_data_model.dart';
 import 'package:skidata/models/prize_model.dart';
+import 'package:skidata/models/tx.dart';
 import 'package:skidata/models/user.dart';
 import 'package:skidata/presentation/app_card.dart';
 import 'package:skidata/presentation/drawer.dart';
+import 'package:skidata/presentation/login.dart';
 import 'package:skidata/presentation/raffle/prize_card_widget.dart';
 import 'package:skidata/presentation/terms_screen.dart';
 import 'package:skidata/presentation/top_bar.dart';
@@ -26,9 +27,9 @@ class RaffleInfoScreen extends StatefulWidget {
 }
 
 class _RaffleInfoScreenState extends State<RaffleInfoScreen> {
-  Future<CustomerData?> getUserData() async {
+  Future<List<ActivityFeed>> getUserData() async {
     return ConiqAccountService()
-        .getCustomerInformation(AppPreferences.getEmailString()!);
+        .getUserTransactions(AppPreferences.getStoredToken()!, context);
   }
 
   @override
@@ -36,7 +37,7 @@ class _RaffleInfoScreenState extends State<RaffleInfoScreen> {
     return Scaffold(
       drawer: const AppDrawer(),
       backgroundColor: kBackgroundGrey,
-      body: FutureBuilder<CustomerData?>(
+      body: FutureBuilder<List<ActivityFeed>>(
           future: getUserData(),
           builder: (
             context,
@@ -50,17 +51,21 @@ class _RaffleInfoScreenState extends State<RaffleInfoScreen> {
                   strokeWidth: 1.5,
                 ),
               );
+            } else if (snapshot.hasError) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+              });
+              child = const SizedBox.shrink();
             } else if (snapshot.data == null) {
               child = const RaffleInfoWidget(
-                name: '',
                 entries: 0,
                 validEntries: [],
               );
             } else if (snapshot.hasData && snapshot.data != null) {
               child = RaffleInfoWidget(
-                name: snapshot.data!.entryData!.customerName!,
-                entries: snapshot.data?.entryData?.entries ?? 0,
-                validEntries: snapshot.data?.transactionData! ?? [],
+                // name: snapshot.data!.entryData!.customerName!,
+                entries: calculateEntries(snapshot.data ?? []),
+                validEntries: snapshot.data ?? [],
               );
             } else {
               child = Center(
@@ -74,14 +79,12 @@ class _RaffleInfoScreenState extends State<RaffleInfoScreen> {
 }
 
 class RaffleInfoWidget extends StatefulWidget {
-  final List<Entry> validEntries;
-  final String name;
+  final List<ActivityFeed> validEntries;
   final int entries;
   const RaffleInfoWidget({
     super.key,
     required this.validEntries,
     required this.entries,
-    required this.name,
   });
 
   @override
@@ -113,13 +116,6 @@ class _RaffleInfoWidgetState extends State<RaffleInfoWidget> {
             child: Column(
               children: [
                 Text(
-                  ' Welcome  ${widget.name}',
-                  style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      color: kDarkBlueTxtColor),
-                ),
-                Text(
                   '${widget.entries}',
                   style: const TextStyle(
                       fontSize: 32,
@@ -132,12 +128,6 @@ class _RaffleInfoWidgetState extends State<RaffleInfoWidget> {
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
                       color: kDarkBlueTxtColor),
-                ),
-                Text(
-                  '*Raffles are calculated hourly and may take up to an hour to appear',
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: Colors.red,
-                      ),
                 ),
                 kSBox10V,
                 CustomCard(
@@ -488,7 +478,7 @@ Step stepperbuilder(
 }
 
 class RaffleEntriesSmallWidget extends StatefulWidget {
-  final List<Entry> validEntries;
+  final List<ActivityFeed> validEntries;
 
   const RaffleEntriesSmallWidget({
     super.key,
@@ -548,14 +538,14 @@ class _RaffleEntriesSmallWidgetState extends State<RaffleEntriesSmallWidget> {
                         controller: _entriesScrollControler,
                         itemCount: widget.validEntries.length,
                         itemBuilder: (context, index) {
-                          Entry entry = widget.validEntries[index];
+                          ActivityFeed entry = widget.validEntries[index];
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
                                 children: [
                                   Text(
-                                    entry.locationName!,
+                                    entry.location.name,
                                     style: smallGreyText.copyWith(
                                       color: Colors.black,
                                     ),
@@ -564,7 +554,7 @@ class _RaffleEntriesSmallWidgetState extends State<RaffleEntriesSmallWidget> {
                               ),
                               kSBox5V,
                               Text(
-                                "Earned ${entry.totalEntries.toString().addCommaOnly()} entries",
+                                "Earned ${(entry.data.price ~/ 1000).toString().addCommaOnly()} entries",
                                 style:
                                     smallGreyText.copyWith(color: Colors.green),
                               ),
@@ -572,7 +562,7 @@ class _RaffleEntriesSmallWidgetState extends State<RaffleEntriesSmallWidget> {
                               Row(
                                 children: [
                                   Text(
-                                    'Kes ${(entry.totalSpend).toString().addCommaOnly()} Spent',
+                                    'Kes ${(entry.data.price).toString().addCommaOnly()} Spent',
                                     style: smallGreyText.copyWith(
                                       color: Colors.black,
                                     ),
@@ -580,7 +570,7 @@ class _RaffleEntriesSmallWidgetState extends State<RaffleEntriesSmallWidget> {
                                   const Spacer(),
                                   Text(
                                     DateFormat.yMMMEd().format(
-                                      entry.transactionDate!,
+                                      entry.eventDate,
                                     ),
                                     textAlign: TextAlign.left,
                                     overflow: TextOverflow.ellipsis,

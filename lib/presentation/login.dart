@@ -8,7 +8,7 @@ import 'package:skidata/utils/responsive.dart';
 import 'package:skidata/utils/string_ext.dart';
 
 class LoginScreen extends StatefulWidget {
-  static const routeName = 'login';
+  static const routeName = '/login';
   const LoginScreen({super.key});
 
   @override

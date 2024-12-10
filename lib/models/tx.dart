@@ -1,178 +1,146 @@
-// import 'dart:convert';
+import 'dart:convert';
 
-// Transactions transactionsFromJson(String str) =>
-//     Transactions.fromJson(json.decode(str));
+Transactions transactionsFromJson(String str) =>
+    Transactions.fromJson(json.decode(str));
 
-// String transactionsToJson(Transactions data) => json.encode(data.toJson());
+String transactionsToJson(Transactions data) => json.encode(data.toJson());
+int calculateEntries(List<ActivityFeed> tx) {
+  if (tx.isNotEmpty) {
+    num sum = 0;
+    for (var i in tx) {
+      sum += i.data.price / 1000;
+    }
+    return sum.toInt();
+  } else {
+    return 0;
+  }
+}
 
-// class Transactions {
-//   List<ActivityFeed> activityFeed;
+class Transactions {
+  List<ActivityFeed> activityFeed;
 
-//   Transactions({
-//     required this.activityFeed,
-//   });
+  ///Calculate entries
 
-//   factory Transactions.fromJson(Map<String, dynamic> json) => Transactions(
-//         activityFeed: List<ActivityFeed>.from(
-//             json["activity_feed"].map((x) => ActivityFeed.fromJson(x))),
-//       );
+  Transactions({
+    required this.activityFeed,
+  });
 
-//   Map<String, dynamic> toJson() => {
-//         "activity_feed":
-//             List<dynamic>.from(activityFeed.map((x) => x.toJson())),
-//       };
-// }
+  factory Transactions.fromJson(Map<String, dynamic> json) => Transactions(
+        activityFeed: List<ActivityFeed>.from(
+            json["activity_feed"].map((x) => ActivityFeed.fromJson(x))),
+      );
 
-// class ActivityFeed {
-//   DateTime eventDate;
-//   Location location;
-//   Data data;
+  Map<String, dynamic> toJson() => {
+        "activity_feed":
+            List<dynamic>.from(activityFeed.map((x) => x.toJson())),
+      };
+}
 
-//   ActivityFeed({
-//     required this.eventDate,
-//     required this.location,
-//     required this.data,
-//   });
+class ActivityFeed {
+  DateTime eventDate;
+  Location location;
+  Data data;
 
-//   factory ActivityFeed.fromJson(Map<String, dynamic> json) => ActivityFeed(
-//         eventDate: DateTime.parse(json["event_date"]),
-//         location: Location.fromJson(json["location"]),
-//         data: Data.fromJson(json["data"]),
-//       );
+  ActivityFeed({
+    required this.eventDate,
+    required this.location,
+    required this.data,
+  });
 
-//   Map<String, dynamic> toJson() => {
-//         "event_date": eventDate.toIso8601String(),
-//         "location": location.toJson(),
-//         "data": data.toJson(),
-//       };
-// }
+  factory ActivityFeed.fromJson(Map<String, dynamic> json) => ActivityFeed(
+        eventDate: DateTime.parse(json["event_date"]),
+        location: Location.fromJson(json["location"]),
+        data: Data.fromJson(json["data"]),
+      );
 
-// class Data {
-//   String id;
-//   num price;
-//   Points points;
+  Map<String, dynamic> toJson() => {
+        "event_date": eventDate.toIso8601String(),
+        "location": location.toJson(),
+        "data": data.toJson(),
+      };
+}
 
-//   dynamic receiptId;
-//   String? voidReason;
-//   dynamic voucherRule;
-//   dynamic receiptImage;
-//   num refundAmount;
+class Data {
+  String id;
+  num price;
+  Points points;
 
-//   Data({
-//     required this.id,
-//     required this.price,
-//     required this.points,
-//     required this.receiptId,
-//     required this.voidReason,
-//     required this.voucherRule,
-//     required this.receiptImage,
-//     required this.refundAmount,
-//   });
+  dynamic receiptId;
+  String? voidReason;
+  dynamic voucherRule;
+  dynamic receiptImage;
+  num refundAmount;
 
-//   factory Data.fromJson(Map<String, dynamic> json) => Data(
-//         id: json["id"],
-//         price: json["price"],
-//         points: Points.fromJson(json["points"]),
-//         receiptId: json["receipt_id"],
-//         voidReason: json["void_reason"],
-//         voucherRule: json["voucher_rule"],
-//         receiptImage: json["receipt_image"],
-//         refundAmount: json["refund_amount"],
-//       );
+  Data({
+    required this.id,
+    required this.price,
+    required this.points,
+    required this.receiptId,
+    required this.voidReason,
+    required this.voucherRule,
+    required this.receiptImage,
+    required this.refundAmount,
+  });
 
-//   Map<String, dynamic> toJson() => {
-//         "id": id,
-//         "price": price,
-//         "points": points.toJson(),
-//         "receipt_id": receiptId,
-//         "void_reason": voidReason,
-//         "voucher_rule": voucherRule,
-//         "receipt_image": receiptImage,
-//         "refund_amount": refundAmount,
-//       };
-// }
+  factory Data.fromJson(Map<String, dynamic> json) => Data(
+        id: json["id"],
+        price: json["price"],
+        points: Points.fromJson(json["points"]),
+        receiptId: json["receipt_id"],
+        voidReason: json["void_reason"],
+        voucherRule: json["voucher_rule"],
+        receiptImage: json["receipt_image"],
+        refundAmount: json["refund_amount"],
+      );
 
-// class Points {
-//   int burned;
-//   int earned;
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "price": price,
+        "points": points.toJson(),
+        "receipt_id": receiptId,
+        "void_reason": voidReason,
+        "voucher_rule": voucherRule,
+        "receipt_image": receiptImage,
+        "refund_amount": refundAmount,
+      };
+}
 
-//   Points({
-//     required this.burned,
-//     required this.earned,
-//   });
+class Points {
+  int burned;
+  int earned;
 
-//   factory Points.fromJson(Map<String, dynamic> json) => Points(
-//         burned: json["burned"],
-//         earned: json["earned"],
-//       );
+  Points({
+    required this.burned,
+    required this.earned,
+  });
 
-//   Map<String, dynamic> toJson() => {
-//         "burned": burned,
-//         "earned": earned,
-//       };
-// }
+  factory Points.fromJson(Map<String, dynamic> json) => Points(
+        burned: json["burned"],
+        earned: json["earned"],
+      );
 
-// class Location {
-//   int id;
-//   String name;
+  Map<String, dynamic> toJson() => {
+        "burned": burned,
+        "earned": earned,
+      };
+}
 
-//   Location({
-//     required this.id,
-//     required this.name,
-//   });
+class Location {
+  int id;
+  String name;
 
-//   factory Location.fromJson(Map<String, dynamic> json) => Location(
-//         id: json["id"],
-//         name: json["name"],
-//       );
+  Location({
+    required this.id,
+    required this.name,
+  });
 
-//   Map<String, dynamic> toJson() => {
-//         "id": id,
-//         "name": name,
-//       };
-// }
+  factory Location.fromJson(Map<String, dynamic> json) => Location(
+        id: json["id"],
+        name: json["name"],
+      );
 
-// List<ActivityFeed> activityFeeds = [
-//   ActivityFeed(
-//     eventDate: DateTime.now(),
-//     location: Location(id: 1, name: 'Art Caffe'),
-//     data: Data(
-//       voidReason: null,
-//       refundAmount: 0,
-//       receiptId: '',
-//       voucherRule: '',
-//       receiptImage: '',
-//       id: 'TXN001',
-//       price: 8770,
-//       points: Points(burned: 10, earned: 20),
-//     ),
-//   ),
-//   ActivityFeed(
-//     eventDate: DateTime.now(),
-//     location: Location(id: 1, name: 'BallPoint'),
-//     data: Data(
-//       voidReason: null,
-//       refundAmount: 0,
-//       receiptId: '',
-//       voucherRule: '',
-//       receiptImage: '',
-//       id: 'TXN001',
-//       price: 11560,
-//       points: Points(burned: 10, earned: 20),
-//     ),
-//   ),
-//   ActivityFeed(
-//     eventDate: DateTime.now(),
-//     location: Location(id: 1, name: 'Bowling'),
-//     data: Data(
-//       voidReason: null,
-//       refundAmount: 0,
-//       receiptId: '',
-//       voucherRule: '',
-//       receiptImage: '',
-//       id: 'TXN001',
-//       price: 15599,
-//       points: Points(burned: 10, earned: 20),
-//     ),
-//   ),
-// ];
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+      };
+}

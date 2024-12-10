@@ -1,9 +1,24 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:skidata/models/customer_data_model.dart';
+import 'package:skidata/models/tx.dart';
 import 'package:skidata/models/user.dart';
+import 'package:skidata/presentation/login.dart';
 import 'package:skidata/services/prefs.dart';
+
+Future<bool> isTokenExpiredFunction(String token) async {
+  try {
+    final decodedToken = jsonDecode(utf8
+        .decode(base64Url.decode(base64Url.normalize(token.split(".")[1]))));
+    final expiryDate =
+        DateTime.fromMillisecondsSinceEpoch(decodedToken['exp'] * 1000);
+    return DateTime.now().isAfter(expiryDate);
+  } catch (e) {
+    return true;
+  }
+}
 
 class ConiqAccountService {
   Future<http.StreamedResponse> signIn(
@@ -59,33 +74,40 @@ class ConiqAccountService {
     }
   }
 
-  // Future<Transactions?> getUserTransactions(
-  //   String token,
-  // ) async {
-  //   Transactions? tx;
-  //   try {
-  //     var headers = {
-  //       'x-api-version': '3.0',
-  //       'Authorization': 'Bearer $token',
-  //       'Cookie': 'PHPSESSID=7eodurur77if2ho2km2kqokja7'
-  //     };
-  //     var request = http.Request(
-  //         'GET', Uri.parse('https://api.coniq.com/app/customer/activity-feed'));
+  Future<List<ActivityFeed>> getUserTransactions(
+      String token, BuildContext context) async {
+    List<ActivityFeed> tx = [];
+    try {
+      var headers = {
+        'x-api-version': '3.0',
+        'Authorization': 'Bearer $token',
+        'Cookie': 'PHPSESSID=7eodurur77if2ho2km2kqokja7'
+      };
+      var request = http.Request(
+          'GET', Uri.parse('https://api.coniq.com/app/customer/activity-feed'));
 
-  //     request.headers.addAll(headers);
+      request.headers.addAll(headers);
 
-  //     http.StreamedResponse response = await request.send();
+      http.StreamedResponse response = await request.send();
 
-  //     if (response.statusCode == 200) {
-  //       tx = transactionsFromJson(await response.stream.bytesToString());
-
-  //       return tx;
-  //     }
-  //   } catch (e) {
-  //     throw e.toString();
-  //   }
-  //   return null;
-  // }
+      if (response.statusCode == 200) {
+        tx = transactionsFromJson(await response.stream.bytesToString())
+            .activityFeed
+            .where((activity) {
+          return activity.data.points.earned >= 10 &&
+              activity.data.price >= 1000 &&
+              activity.eventDate.isAfter(DateTime(2024, 11, 30));
+        }).toList();
+      } else if (response.statusCode == 401) {
+        if (context.mounted) {
+          throw UnauthorizedException('Token is invalid or expired.');
+        }
+      }
+    } catch (e) {
+      throw e.toString();
+    }
+    return tx;
+  }
 
   // Future<List<ActivityFeed>> getRaffleEntriesTx(
   //   String token,
@@ -123,8 +145,8 @@ class ConiqAccountService {
   //   return entries;
   // }
 
-  Future<CustomerData?> getCustomerInformation(String email) async {
-    // TODO: Restore email
+  Future<CustomerData?> getCustomerInformation(
+      String email, BuildContext context) async {
     try {
       var request = http.Request(
           'GET',
@@ -136,12 +158,17 @@ class ConiqAccountService {
 
       if (response.statusCode == 200) {
         return customerDataFromJson(jsonEncode(body));
-      } else {
+      } else if (response.statusCode == 401) {
+        if (context.mounted) {
+          print('*' * 89);
+          Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+        }
         return null;
       }
     } catch (e) {
       throw e.toString();
     }
+    return null;
   }
 
   Future<int> reedemPoints(
@@ -166,4 +193,12 @@ class ConiqAccountService {
 
     return response.statusCode;
   }
+}
+
+class UnauthorizedException implements Exception {
+  final String message;
+  UnauthorizedException([this.message = 'Unauthorized access.']);
+
+  @override
+  String toString() => message;
 }
