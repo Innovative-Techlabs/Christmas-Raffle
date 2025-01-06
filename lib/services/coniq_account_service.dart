@@ -7,18 +7,6 @@ import 'package:skidata/models/tx.dart';
 import 'package:skidata/models/user.dart';
 import 'package:skidata/services/prefs.dart';
 
-Future<bool> isTokenExpiredFunction(String token) async {
-  try {
-    final decodedToken = jsonDecode(utf8
-        .decode(base64Url.decode(base64Url.normalize(token.split(".")[1]))));
-    final expiryDate =
-        DateTime.fromMillisecondsSinceEpoch(decodedToken['exp'] * 1000);
-    return DateTime.now().isAfter(expiryDate);
-  } catch (e) {
-    return true;
-  }
-}
-
 class ConiqAccountService {
   Future<http.StreamedResponse> signIn(
     String email,
@@ -95,7 +83,8 @@ class ConiqAccountService {
             .where((activity) {
           return activity.data.points.earned >= 10 &&
               activity.data.price >= 1000 &&
-              activity.eventDate.isAfter(DateTime(2024, 11, 30));
+              activity.eventDate.isAfter(DateTime(2024, 11, 30)) &&
+              activity.eventDate.isBefore(DateTime(2025, 1, 1));
         }).toList();
       } else if (response.statusCode == 401) {
         if (context.mounted) {
