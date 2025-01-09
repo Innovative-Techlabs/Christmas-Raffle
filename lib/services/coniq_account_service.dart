@@ -84,7 +84,7 @@ class ConiqAccountService {
           return activity.data.points.earned >= 10 &&
               activity.data.price >= 1000 &&
               activity.eventDate.isAfter(DateTime(2024, 11, 30)) &&
-              activity.eventDate.isBefore(DateTime(2025, 1, 1));
+              activity.eventDate.isBefore(DateTime(2025, 2, 1));
         }).toList();
       } else if (response.statusCode == 401) {
         if (context.mounted) {
